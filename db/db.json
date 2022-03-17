@@ -1,6 +1,18 @@
 [
     {
-        "title":"Test Title",
-        "text":"Test text"
+        "title":"Test Note 1",
+        "text":"The actual content for NOTE1"
+    },
+    {
+        "title":"Test Note 2",
+        "text":"The actual content for NOTE2"
+    },
+    {
+        "title":"Test Note 3",
+        "text":"The actual content for NOTE3"
+    },
+    {
+        "title":"Test Note 4",
+        "text":"The actual content for NOTE4"
     }
 ]
