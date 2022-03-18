@@ -56,6 +56,6 @@ notes.delete('/api/notes/:id', (req, res) => {
 
     }
   }
-  return res.json(result);
+  return res.json(notes);
 
 })
