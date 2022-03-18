@@ -1,65 +1,38 @@
-const notesForm = document.getElementById('feedback-form');
+const notesForm = document.getElementById('notes-form');
 
-const notes = require('express').Router();
-const { readFromFile, readAndAppend, removeFromDB } = require('../../../helpers/fsUtils');
-const uuid = require('../../../helpers/uuid');
-const notesData = require('../../../db/db.json');
+notesForm.addEventListener('submit', (e) => {
 
-// GET Route for retrieving all the tips
-notes.get('/api/notes', (req, res) => {
-  console.info(`${req.method} request received for tips`);
-  readFromFile('./db/db.json').then((data) => res.json(JSON.parse(data)));
-});
+  e.preventDefault();
 
-// POST Route for a new UX/UI tip
-notes.post('/api/notes', (req, res) => {
-  console.info(`${req.method} request received to add a note`);
-  console.log(req.body);
+  // Get the feedback text from the DOM and assign it to a variable
+  let noteTitle = document.getElementById('feedbackText').value;
+  // Get the username text and add it to a variable
+  let noteText = document.getElementById('feedbackUsername').value.trim();
 
-  const { noteTitle, noteText } = req.body;
+  // Create an object with the username and feedback
+  const newNote = {
+    noteTitle,
+    noteText
+  };
 
-  if (req.body) {
-    const newNote = {
-      noteTitle,
-      noteText,
-      note_id: uuid(),
-    };
-
-    readAndAppend(newNote, './db/db.json');
-    res.json(`Note added successfully 🚀`);
-  } else {
-    res.error('Error in adding Note');
-  }
-});
-
-
-// THIS IS THE BONUS ... to delete from the db
-notes.delete('/api/notes/:id', (req, res) => {
-  console.info(`${req.method} request received for tips`);
-  console.log(req.body);
-
-  const requestedID = req.params.id.toLowerCase();
-
-  for (let i = 0; i < notesData.length; i++) {
-    const currentNoteID = notesData[i].id;
-    if (requestedID === currentNoteID) {
-      // result.push(notesData[i]);
-
-      // reformOfNotesData.splice(i, 1);
-      let indexToBeRemoved = i;
-      console.log("index to be removed is:\n");
-      console.log(indexToBeRemoved);
-
-      console.log("Full Entry to be Removed Is: \n");
-      console.log(notesData[i]);
-
-      // USE THE NEWLY-MADE removeFromDB FUNCTION
-      removeFromDB(indexToBeRemoved, '../db/db.json')
-
-    }
-  }
-  return res.json(result);
-
+  // Fetch POST request to the server
+  fetch('api/notes', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(newNote),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      alert(data.status);
+      noteTitle = '';
+      noteText = '';
+    });
 })
+.catch((error) => {
+  console.error('Error:', error);
+});
+
 
 module.exports = notes;
