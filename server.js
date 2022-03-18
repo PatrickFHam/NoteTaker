@@ -1,12 +1,16 @@
 const express = require('express');
+const { json } = require('express/lib/response');
+const { fstat } = require('fs');
+const fs = require('fs');
 const path = require('path');
-const notesData = require('./db/db.json');
 const ShortUniqueID = require('short-unique-id');
 const uid = new ShortUniqueID({
   length: 3,
-  dictionary: number
+  dictionary: "number"
 });
-const { readFromFile, readAndAppend, removeFromDB } = require('./helpers/fsUtils');
+let notesData = require('./db/db.json');
+
+const { readFromFile, readAndAppend, removeFromDB, refreshNotesDataArray } = require('./helpers/fsUtils');
 
 const PORT = 3001;
 
@@ -28,62 +32,95 @@ app.get('/notes', (req, res) =>
 );
 
 
-// GET Route for retrieving all the tips
-notes.get('/api/notes', (req, res) => {
+
+// GET Route for retrieving all the notes
+app.get('/api/notes', (req, res) => {
   console.info(`${req.method} request received for tips`);
-  readFromFile('../db/db.json').then((data) => res.json(JSON.parse(data)));
+  readFromFile('./db/db.json').then((data) => res.json(JSON.parse(data)));
+  return res.json;
 });
 
-// POST Route for a new UX/UI tip
-notes.post('/api/notes', (req, res) => {
+
+
+// GET Route for retrieing a specific tip, by ID Number
+app.get('/api/notes/:id', (req, res) => {
+  const requestedNote = req.params.id.toLowerCase();
+
+  readFromFile('./db/db.json').then((data) => notesData = JSON.parse(data));
+
+  console.log("notesData before lookup looks like:");
+  console.log(notesData);
+
+  if (requestedNote) {
+    for (let i = 0; i < notesData.length; i++) {
+      if (requestedNote === notesData[i].id.toLowerCase()) {
+        console.log("searched id returned the following entry:");
+        console.log(notesData[i]);
+        return res.json(notesData[i]);
+      }
+    }
+  }
+
+  return res.json('No term found');
+});
+
+
+
+// POST Route for a new note
+app.post('/api/notes', (req, res) => {
   console.info(`${req.method} request received to add a note`);
   console.log(req.body);
 
-  const { noteTitle, noteText } = req.body;
+  const { title, text } = req.body;
 
   if (req.body) {
     const newNote = {
-      noteTitle,
-      noteText,
-      note_id: uuid(),
+      title,
+      text,
+      id: uid()
     };
 
-    readAndAppend(newNote, '../db/db.json');
+    readAndAppend(newNote, './db/db.json');
+
+    readFromFile('./db/db.json').then((data) => notesData = JSON.parse(data));
+
     res.json(`Note added successfully 🚀`);
   } else {
     res.error('Error in adding Note');
   }
 });
 
-
+//  -------------------------------------------------------------
 // THIS IS THE BONUS ... to delete from the db
-notes.delete('/api/notes/:id', (req, res) => {
-  console.info(`${req.method} request received for tips`);
-  console.log(req.body);
 
-  const requestedID = req.params.id.toLowerCase();
+app.delete('/api/notes/:id', (req, res) => {
+  console.info(`${req.method} request received to remove a note`);
+
+  let requestedID = req.params.id.toLowerCase();
+
+  console.info(`Requested ID was: ${requestedID}`);
+
+  readFromFile('./db/db.json').then((data) => notesData = JSON.parse(data));
+
+  console.log("updated notesData looks like:");
+  console.log(notesData);
+
+  let titleToBeRemoved = "";
 
   for (let i = 0; i < notesData.length; i++) {
-    const currentNoteID = notesData[i].id;
+    let currentNoteID = notesData[i].id;
     if (requestedID === currentNoteID) {
-      // result.push(notesData[i]);
 
-      // reformOfNotesData.splice(i, 1);
       let indexToBeRemoved = i;
-      console.log("index to be removed is:\n");
-      console.log(indexToBeRemoved);
-
-      console.log("Full Entry to be Removed Is: \n");
-      console.log(notesData[i]);
-
-      // USE THE NEWLY-MADE removeFromDB FUNCTION
-      removeFromDB(indexToBeRemoved, '../db/db.json')
-
+      titleToBeRemoved = notesData[i].title;
+      console.log("Title to be Removed is:");
+      console.log(titleToBeRemoved);
+      removeFromDB(indexToBeRemoved, './db/db.json');
     }
   }
-  return res.json(notes);
-
+  res.json(`Note ID# ${requestedID} entitled '${titleToBeRemoved}' DELETED successfully 🚀`);
 })
+// ----------------------------------------------------------------
 
 
 

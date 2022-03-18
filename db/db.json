@@ -1,22 +1,17 @@
 [
     {
-        "title":"Test Note 1",
-        "text":"The actual content for NOTE1",
-        "id":"123"
+        "title": "Test Note 1",
+        "text": "The actual content for NOTE1",
+        "id": "123"
     },
     {
-        "title":"Test Note 2",
-        "text":"The actual content for NOTE2",
-        "id": "234"
-    },
-    {
-        "title":"Test Note 3",
-        "text":"The actual content for NOTE3",
+        "title": "Test Note 3",
+        "text": "The actual content for NOTE3",
         "id": "345"
     },
     {
-        "title":"Test Note 4",
-        "text":"The actual content for NOTE4",
-        "id": "456"
+        "title": "Test Note 5",
+        "text": "The actual content for NOTE5",
+        "id": "567"
     }
 ]

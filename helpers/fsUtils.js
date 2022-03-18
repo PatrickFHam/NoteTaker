@@ -3,10 +3,12 @@ const util = require('util');
 
 const readFromFile = util.promisify(fs.readFile);
 
+
 const writeToFile = (destination, content) =>
   fs.writeFile(destination, JSON.stringify(content, null, 4), (err) =>
     err ? console.error(err) : console.info(`\nData written to ${destination}`)
   );
+
 
 const readAndAppend = (content, file) => {
   fs.readFile(file, 'utf8', (err, data) => {
@@ -22,14 +24,20 @@ const readAndAppend = (content, file) => {
 
 
 // THIS IS THE BONUS, to remove from the db
-const removeFromDB = (content, file) => {
-  fs.readFile(file, 'utf8', (err, data) => {
+const removeFromDB = (indexToDelete, file) => {
+  fs.readFile(file, 'utf8', (err, origString) => {
     if (err) {
       console.error(err);
     } else {
-      const parsedData = JSON.parse(data);
-      parsedData.splice(content, 1);
-      writeToFile(file, parsedData);
+      console.log("original string is:");
+      console.log(origString);
+      let parsedData = JSON.parse(origString);
+      parsedData.splice(indexToDelete, 1);
+      console.log("parsedData, after splice is:");
+      console.log(parsedData);
+      fs.writeFile('./db/db.json', JSON.stringify(parsedData, null, 4), (err) =>
+        err ? console.error(err) : console.info(`\nNew DELETION was made.`)
+        )
     }
   });
 }
