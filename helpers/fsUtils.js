@@ -20,4 +20,18 @@ const readAndAppend = (content, file) => {
   });
 };
 
-module.exports = { readFromFile, writeToFile, readAndAppend };
+
+// THIS IS THE BONUS, to remove from the db
+const removeFromDB = (content, file) => {
+  fs.readFile(file, 'utf8', (err, data) => {
+    if (err) {
+      console.error(err);
+    } else {
+      const parsedData = JSON.parse(data);
+      parsedData.splice(content, 1);
+      writeToFile(file, parsedData);
+    }
+  });
+}
+
+module.exports = { readFromFile, writeToFile, readAndAppend, removeFromDB };
