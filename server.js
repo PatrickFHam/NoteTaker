@@ -1,6 +1,7 @@
 // PULLS-IN THE REQUIRED EXPRESS, PATH, AND FUNCTIONS FROM THE FOLDER 'HELPERS'
 const express = require('express');
 const path = require('path');
+const { clog } = require('./middleware/clog');
 const ShortUniqueID = require('short-unique-id');
 // "UID" is an 'npm' package that a scalable randomizer, used with these note ID numbers.
 const uid = new ShortUniqueID({
@@ -17,8 +18,10 @@ const app = express();
 let notesData = require('./db/db.json');
 
 // Middleware for parsing JSON and urlencoded form data
+app.use(clog);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use('/api', api);
 
 app.use(express.static('public'));
 
