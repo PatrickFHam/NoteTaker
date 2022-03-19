@@ -1,10 +1,11 @@
 {
   "name": "note-taker",
   "version": "1.0.0",
-  "description": "",
+  "description": "- This browser-based note-taker is a quick and easy way to take down a thought to remember it later.  It even sorts your thoughts with the most recent on top!\r - Front-End Tech Used:  HTML, CSS, BootStrap, FontAwesome, JavaScript\r - Back-End / Server Tech Used:  NodeJS, express.js",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "author": "",
   "license": "ISC",
@@ -14,5 +15,17 @@
     "path": "^0.12.7",
     "short-unique-id": "^4.4.4",
     "util": "^0.12.4"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PatrickFHam/NoteTaker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/PatrickFHam/NoteTaker/issues"
+  },
+  "homepage": "https://github.com/PatrickFHam/NoteTaker#readme",
+  "engines": {
+    "node": "16.x"
   }
 }
