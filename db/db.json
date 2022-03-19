@@ -30,13 +30,13 @@
         "id": "678"
     },
     {
-        "title": "Test Note 7",
-        "text": "The actual content for NOTE7",
-        "id": "789"
-    },
-    {
         "title": "Test Note 8",
         "text": "The actual content for NOTE8",
         "id": "890"
+    },
+    {
+        "title": "Test Note 7",
+        "text": "new test note for NOTE NUMBER 7",
+        "id": "754"
     }
 ]
