@@ -1,3 +1,5 @@
+// ENTIRE INDEX.JS FILE WAS GIVEN ... NO CHANGES MADE AT ALL
+
 let noteTitle;
 let noteText;
 let saveNoteBtn;
@@ -119,6 +121,10 @@ const handleRenderSaveBtn = () => {
 // Render the list of note titles
 const renderNoteList = async (notes) => {
   let jsonNotes = await notes.json();
+
+  // REVERSES THE ORDER, SO MOST RECENT IS ON-TOP
+  reversedJsonNotes = jsonNotes.reverse();
+
   if (window.location.pathname === '/notes') {
     noteList.forEach((el) => (el.innerHTML = ''));
   }

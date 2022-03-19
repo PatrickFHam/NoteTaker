@@ -1,15 +1,17 @@
+// PULLING IN NECESSARY, FILE SYSTEM (read/write) and UTIL (for promisify)
 const fs = require('fs');
 const util = require('util');
 
+// PROMISIFY, TO ENSURE IT'S FINISHED BEFORE IT CONTINUES TO THE NEXT PROCESS
 const readFromFile = util.promisify(fs.readFile);
 
-
+// WRITES/OVERWRITES A FILE, IN THIS CASE, IS BUILT TO PULL IN A NEWLY-UPDATED ARRAY OF OBJECTS (NOTES) AND OVERWRITE THE "DB.JSON" FILE
 const writeToFile = (destination, content) =>
   fs.writeFile(destination, JSON.stringify(content, null, 4), (err) =>
     err ? console.error(err) : console.info(`\nData written to ${destination}`)
   );
 
-
+// USED TO POSTING A NEW NOTE TO THE ARRAY OF OBJECTS
 const readAndAppend = (content, file) => {
   fs.readFile(file, 'utf8', (err, data) => {
     if (err) {
@@ -23,7 +25,7 @@ const readAndAppend = (content, file) => {
 };
 
 
-// THIS IS THE BONUS, to remove from the db
+// THIS IS THE BONUS, to remove a note from the db
 const removeFromDB = (indexToDelete, file) => {
   fs.readFile(file, 'utf8', (err, origString) => {
     if (err) {
