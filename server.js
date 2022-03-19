@@ -11,7 +11,7 @@ const uid = new ShortUniqueID({
 const { readFromFile, readAndAppend, removeFromDB, } = require('./helpers/fsUtils');
 
 // ASSIGNED PORT NUMBER, ALSO ASSIGNS VARIABLE NAME TO EXPRESS.JS
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 const app = express();
 
 // GIVES VARIABLE NAME TO THE NOTES DATABASE, PULLS IT IN FOR USE
