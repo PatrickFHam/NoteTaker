@@ -29,12 +29,8 @@ const removeFromDB = (indexToDelete, file) => {
     if (err) {
       console.error(err);
     } else {
-      console.log("original string is:");
-      console.log(origString);
       let parsedData = JSON.parse(origString);
       parsedData.splice(indexToDelete, 1);
-      console.log("parsedData, after splice is:");
-      console.log(parsedData);
       fs.writeFile('./db/db.json', JSON.stringify(parsedData, null, 4), (err) =>
         err ? console.error(err) : console.info(`\nNew DELETION was made.`)
         )

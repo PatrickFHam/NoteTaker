@@ -1,7 +1,7 @@
 const express = require('express');
-const { json } = require('express/lib/response');
-const { fstat } = require('fs');
-const fs = require('fs');
+// const { json } = require('express/lib/response');
+// const { fstat } = require('fs');
+// const fs = require('fs');
 const path = require('path');
 const ShortUniqueID = require('short-unique-id');
 const uid = new ShortUniqueID({
@@ -10,7 +10,7 @@ const uid = new ShortUniqueID({
 });
 let notesData = require('./db/db.json');
 
-const { readFromFile, readAndAppend, removeFromDB, refreshNotesDataArray } = require('./helpers/fsUtils');
+const { readFromFile, readAndAppend, removeFromDB, } = require('./helpers/fsUtils');
 
 const PORT = 3001;
 
@@ -35,7 +35,7 @@ app.get('/notes', (req, res) =>
 
 // GET Route for retrieving all the notes
 app.get('/api/notes', (req, res) => {
-  console.info(`${req.method} request received for tips`);
+  console.info(`${req.method} request received to GET all notes`);
   readFromFile('./db/db.json').then((data) => res.json(JSON.parse(data)));
   return res.json;
 });
@@ -44,18 +44,14 @@ app.get('/api/notes', (req, res) => {
 
 // GET Route for retrieing a specific tip, by ID Number
 app.get('/api/notes/:id', (req, res) => {
+  console.info(`${req.method} request received to GET a specific note by id#`);
   const requestedNote = req.params.id.toLowerCase();
 
   readFromFile('./db/db.json').then((data) => notesData = JSON.parse(data));
 
-  console.log("notesData before lookup looks like:");
-  console.log(notesData);
-
   if (requestedNote) {
     for (let i = 0; i < notesData.length; i++) {
       if (requestedNote === notesData[i].id.toLowerCase()) {
-        console.log("searched id returned the following entry:");
-        console.log(notesData[i]);
         return res.json(notesData[i]);
       }
     }
@@ -68,7 +64,7 @@ app.get('/api/notes/:id', (req, res) => {
 
 // POST Route for a new note
 app.post('/api/notes', (req, res) => {
-  console.info(`${req.method} request received to add a note`);
+  console.info(`${req.method} request received to POST a note`);
   console.log(req.body);
 
   const { title, text } = req.body;
@@ -84,26 +80,20 @@ app.post('/api/notes', (req, res) => {
 
     readFromFile('./db/db.json').then((data) => notesData = JSON.parse(data));
 
-    res.json(`Note added successfully 🚀`);
+    res.json(`Note with title '${newNote.title}' added successfully 🚀`);
   } else {
     res.error('Error in adding Note');
   }
 });
 
-//  -------------------------------------------------------------
-// THIS IS THE BONUS ... to delete from the db
 
+// DELETE Route for deleting a note (by ID#)
 app.delete('/api/notes/:id', (req, res) => {
-  console.info(`${req.method} request received to remove a note`);
+  console.info(`${req.method} request received to DELETE a note`);
 
   let requestedID = req.params.id.toLowerCase();
 
-  console.info(`Requested ID was: ${requestedID}`);
-
   readFromFile('./db/db.json').then((data) => notesData = JSON.parse(data));
-
-  console.log("updated notesData looks like:");
-  console.log(notesData);
 
   let titleToBeRemoved = "";
 
@@ -113,15 +103,11 @@ app.delete('/api/notes/:id', (req, res) => {
 
       let indexToBeRemoved = i;
       titleToBeRemoved = notesData[i].title;
-      console.log("Title to be Removed is:");
-      console.log(titleToBeRemoved);
       removeFromDB(indexToBeRemoved, './db/db.json');
     }
   }
   res.json(`Note ID# ${requestedID} entitled '${titleToBeRemoved}' DELETED successfully 🚀`);
 })
-// ----------------------------------------------------------------
-
 
 
 app.listen(PORT, () =>
