@@ -1,4 +1,6 @@
-// ENTIRE INDEX.JS FILE WAS GIVEN ... NO CHANGES MADE AT ALL
+// ENTIRE INDEX.JS FILE WAS GIVEN ... 
+//     ONLY ONE CHANGE MADE, to reverse-sort the notes,
+//     with the most recent on top.
 
 let noteTitle;
 let noteText;
