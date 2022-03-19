@@ -1,4 +1,5 @@
 # NoteTaker
+Deployed App:  https://notetaker-patrickfham.herokuapp.com/
 
 
 ## Description
@@ -7,6 +8,7 @@
 - Back-End / Server Tech Used:  NodeJS, express.js
 
 ## Setup Instructions
+- NONE!  Navigate to https://notetaker-patrickfham.herokuapp.com/ , and you're good to go!
 
 
 ## Screenshots
